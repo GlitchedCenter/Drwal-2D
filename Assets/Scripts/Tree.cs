@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class Tree : MonoBehaviour
@@ -20,8 +19,6 @@ public class Tree : MonoBehaviour
         {
             //TODO: dodać dźwięk ścinania
             GameManager.Instance.AddWood((int)woodAmount);
-            GameManager.Instance.AddMoney((int)woodAmount); //TODO: delede
-            GameManager.Instance.NextDay(); //TODO: delede
             gameObject.SetActive(false);
         }
     }

@@ -4,8 +4,6 @@ using UnityEngine.InputSystem;
 
 public class Cutter : MonoBehaviour
 {
-   //[Czy skrypt "Tree" nie powinien być ScriptableObjects
-   [SerializeField] private int cuttingPower;
    private void Start()
    {
       Debug.Log("Cutter Start");
@@ -21,7 +19,7 @@ public class Cutter : MonoBehaviour
             return;
          if (hitResult.collider.CompareTag("Cuttable"))
          {
-            hitResult.collider.gameObject.GetComponent<Tree>().TakeDamage(cuttingPower); //TODO: tutaj będzie player.cutDmg
+            hitResult.collider.gameObject.GetComponent<Tree>().TakeDamage(GameManager.Instance.CurrentAxePower); //TODO: tutaj będzie player.cutDmg
             
             Debug.Log("CHOP!");
          }

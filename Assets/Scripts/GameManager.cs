@@ -9,10 +9,14 @@ public class GameManager : MonoBehaviour
     [field: SerializeField] public int WoodAmount { get; private set; }
     [field: SerializeField] public int MoneyAmount { get; private set; }
     [field: SerializeField] public int CurrentDay { get; private set; } = 1;
+    [field: SerializeField] public int SeedlingAmount { get; private set; }
+    [field: SerializeField] public int BaseAxePower { get; private set; }
+    [field: SerializeField] public int CurrentAxePower { get; private set; }
 
     public static event Action OnStateChanged;
 
     [SerializeField] private int treesOnScene;
+
 
     private void Awake()
     {
@@ -22,17 +26,49 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
     }
 
-    public void AddWood(int amount)
+    public void ChangeWood(int delta)
     {
-        WoodAmount += amount;
+        if (delta <= 0) return;
+        WoodAmount += delta;
         OnStateChanged?.Invoke();
     }
 
-    //TODO: metoda ta daje $$ z drzewa ale jeszcze będzie trzeba sprzedawać drewno za $$$
-    public void AddMoney(int amount)
+    public void ChangeSeedlings(int delta)
     {
-        MoneyAmount += amount;
+        if (delta <= 0) return;
+        SeedlingAmount += delta;
         OnStateChanged?.Invoke();
+    }
+
+    public void ChangeMoney(int delta)
+    {
+        if (delta <= 0) return;
+        MoneyAmount += delta;
+        OnStateChanged?.Invoke();
+    }
+
+    public void ChangeAxePower(int delta)
+    {
+        CurrentAxePower += delta;
+        if (CurrentAxePower < BaseAxePower)
+            CurrentAxePower = BaseAxePower;
+        OnStateChanged?.Invoke();
+    }
+
+    public bool TrySpendWood(int amount)
+    {
+        if ((WoodAmount < amount) || (amount <= 0)) return false;
+        WoodAmount -= amount;
+        OnStateChanged?.Invoke();
+        return true;
+    }
+
+    public bool TrySpendMoney(int amount)
+    {
+        if ((MoneyAmount < amount) || (amount <= 0)) return false;
+        MoneyAmount -= amount;
+        OnStateChanged?.Invoke();
+        return true;
     }
 
     public void NextDay()
@@ -45,10 +81,11 @@ public class GameManager : MonoBehaviour
     {
         treesOnScene++;
     }
+
     public void UnregisterTree()
     {
         treesOnScene--;
-        
+
         if (treesOnScene <= 0)
         {
             Debug.Log("Wszystkie drzewa ścięte!");

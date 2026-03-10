@@ -18,7 +18,7 @@ public class Tree : MonoBehaviour
         if (currentHitPoints <= 0)
         {
             //TODO: dodać dźwięk ścinania
-            GameManager.Instance.AddWood((int)woodAmount);
+            GameManager.Instance.ChangeWood((int)woodAmount);
             gameObject.SetActive(false);
         }
     }

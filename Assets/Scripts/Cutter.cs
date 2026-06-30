@@ -1,4 +1,3 @@
-using System.Net;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,10 +10,12 @@ public class Cutter : MonoBehaviour
 
    private void Update()
    {
+      if(GameManager.Instance.IsShopOpen) return;
+      
       if (Mouse.current.leftButton.wasPressedThisFrame)
       {
          Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-         RaycastHit2D hitResult = Physics2D.Raycast(mousePosition, Vector2.zero);
+         RaycastHit2D hitResult = Physics2D.Raycast(mousePosition, Vector2.zero); //TODO: moze jeszcze dodać trafienia w kamień?
          if (!hitResult.collider)
             return;
          if (hitResult.collider.CompareTag("Cuttable"))

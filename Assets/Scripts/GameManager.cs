@@ -12,12 +12,14 @@ public class GameManager : MonoBehaviour
     [field: SerializeField] public int SeedlingAmount { get; private set; }
     [field: SerializeField] public int BaseAxePower { get; private set; }
     [field: SerializeField] public int CurrentAxePower { get; private set; }
+    [field: SerializeField] public bool IsShopOpen { get; private set; }
 
     public static event Action OnStateChanged;
+    public static event Action OnNextDay;
 
     [SerializeField] private int treesOnScene;
 
-
+    
     private void Awake()
     {
         if (Instance == null)
@@ -70,11 +72,18 @@ public class GameManager : MonoBehaviour
         OnStateChanged?.Invoke();
         return true;
     }
-
+    public void ChangeShop()
+    {
+        IsShopOpen = !IsShopOpen;
+        Debug.Log("Shop Panel Changed");
+        OnStateChanged?.Invoke();
+    }
     public void NextDay()
     {
         CurrentDay++;
+        ChangeShop();
         OnStateChanged?.Invoke();
+        OnNextDay?.Invoke();
     }
 
     public void RegisterTree()

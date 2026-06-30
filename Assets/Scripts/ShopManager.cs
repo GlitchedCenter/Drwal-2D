@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class ShopManager : MonoBehaviour
@@ -5,7 +6,14 @@ public class ShopManager : MonoBehaviour
     [SerializeField] private int baseSeedlingCost = 2;
     [SerializeField] private int baseAxeUpgradeCost = 10;
     [SerializeField] private int baseSellingPriceWood = 1;
+    
+    [SerializeField] private GameObject shopPanel;
 
+    private void OnEnable()
+    {
+        GameManager.OnStateChanged += UpdateShopPanel;
+    }
+   
     public void OnSellWoodButtonClicked(int amount)
     {
         if (!GameManager.Instance.TrySpendWood(amount)) return;
@@ -27,5 +35,19 @@ public class ShopManager : MonoBehaviour
         if (!GameManager.Instance.TrySpendMoney(baseAxeUpgradeCost)) return;
 
         GameManager.Instance.ChangeAxePower(amount);
+    }
+
+    public void OnExitButtonClicked()
+    {
+        GameManager.Instance.ChangeShop();
+    }
+    private void UpdateShopPanel()
+    {
+        shopPanel.SetActive(GameManager.Instance.IsShopOpen);
+    }
+    
+    private void OnDisable()
+    {
+        GameManager.OnStateChanged -= UpdateShopPanel;
     }
 }
